@@ -2,12 +2,12 @@
   flex: 0.4;
   border-right: 1px solid var(--twitter-background);
   min-width: fit-content;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 
-.feed::-webkit-scrollbar {
+/* .feed::-webkit-scrollbar {
   display: none;
-}
+} */
 
 .feed-header {
   position: sticky;
