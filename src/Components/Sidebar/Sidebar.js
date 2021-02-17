@@ -10,7 +10,7 @@ function Sidebar() {
   return (
     <div className="sidebar">
       {/* Twitter Icon */}
-      <TwitterIcon />
+      <TwitterIcon className="sidebar-twitter-icon"/>
 
       {/* Sidebar Option */}
       <SidebarOption active Icon={HomeIcon} text="Home" />
