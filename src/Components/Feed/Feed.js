@@ -28,7 +28,7 @@ function Feed() {
       <FlipMove>
         {posts.map((post) => (
           <Post
-            key={post.text} //documentid aaegi yahan pr doc.id
+            key={post.text} //documentid aaegi yahan pr firebase.doc.id
             displayName={post.displayName}
             userName={post.userName}
             verified={post.verified}

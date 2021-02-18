@@ -1,17 +1,12 @@
 import "./App.css";
-import Sidebar from "./Components/Sidebar/Sidebar";
-import Feed from "./Components/Feed/Feed";
-import Widgets from "./Components/Widgets/Widgets";
+import Home from "./Pages/Home";
+import SignUp from "./Pages/SignUp";
 
 function App() {
   return (
     <div className="app">
-      {/* Sidebar */}
-      <Sidebar />
-      {/* Feed */}
-      <Feed />
-      {/* Widgets */}
-      <Widgets />
+      {/* <Home /> */}
+      <SignUp />
     </div>
   );
 }
