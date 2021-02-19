@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { Avatar, Button } from "@material-ui/core";
+import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 
 import firebaseApp from "../../firebase";
 
@@ -9,18 +10,53 @@ import "./TweetBox.css";
 function TweetBox() {
   const [tweetMessage, setTweetMessage] = useState("");
   const [tweetImage, setTweetImage] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [verified, setVerified] = useState("false");
+  const [userID, setUserID] = useState("");
+
+  firebaseApp.auth().onAuthStateChanged((user) => {
+    if (user) console.log("Signed In");
+    var userID = firebaseApp.auth().currentUser.uid;
+    const userRef = firebaseApp.firestore().collection("users").doc(userID);
+    userRef
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log("Doc data: ", doc.data());
+
+          const data = doc.data();
+          setFullName(data.fullName);
+          setUserName(data.userName);
+          setVerified(data.verified);
+          setAvatar(data.avatar);
+          setUserID(userID);
+        } else console.log("No Data");
+      })
+      .catch((err) => console.log("Error"));
+  });
+
+  const onFileChange = async (e) => {
+    const file = e.target.files[0];
+    const storageRef = firebaseApp.storage.ref("postImage/");
+    const fileRef = storageRef.child(file.name);
+    await fileRef.put(file);
+    setTweetImage(await fileRef.getDownloadURL());
+  };
 
   const sendTweet = (e) => {
     e.preventDefault();
 
-    firebaseApp.collection("posts").add({
-      displayName: "Adeena",
-      userName: "adeena",
-      verified: true,
+    firebaseApp.firestore().collection("posts").add({
+      displayName: fullName,
+      userName: userName,
+      verified: verified,
       text: tweetMessage,
       image: tweetImage,
-      avatar:
-        "https://kajabi-storefronts-production.global.ssl.fastly.net/kajabi-storefronts-production/themes/284832/settings_images/rLlCifhXRJiT0RoN2FjK_Logo_roundbackground_black.png",
+      createdOn: Date(),
+      creatyBy: userID,
+      avatar: avatar,
     });
 
     setTweetMessage("");
@@ -30,7 +66,7 @@ function TweetBox() {
     <div className="tweetBox">
       <form>
         <div className="tweetBox-input">
-          <Avatar src="https://kajabi-storefronts-production.global.ssl.fastly.net/kajabi-storefronts-production/themes/284832/settings_images/rLlCifhXRJiT0RoN2FjK_Logo_roundbackground_black.png" />
+          <Avatar src={avatar} />
           <input
             onChange={(e) => setTweetMessage(e.target.value)}
             value={tweetMessage}
@@ -45,6 +81,9 @@ function TweetBox() {
           placeholder="Optional: Enter image URL"
           type="text"
         />
+
+        <PhotoLibraryIcon />
+        <input onChange={onFileChange} type="file" />
 
         <Button
           onClick={sendTweet}

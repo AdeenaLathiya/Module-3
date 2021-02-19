@@ -13,7 +13,7 @@ function Feed() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    firebaseApp.collection("posts").onSnapshot((snapshot) => {
+    firebaseApp.firestore().collection("posts").onSnapshot((snapshot) => {
       setPosts(snapshot.docs.map((doc) => doc.data()));
     });
   }, []);
