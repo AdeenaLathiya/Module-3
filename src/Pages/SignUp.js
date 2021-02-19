@@ -12,7 +12,7 @@ import "./SignUp.css";
 
 function SignUp() {
   return (
-    <div>
+    <div className="body">
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className="signup-body">
@@ -24,69 +24,72 @@ function SignUp() {
           </Typography>
           <form className="signup-form">
             <Grid container spacing={2}>
-              <Grid item >
+              <Grid item xs={12} sm={12}>
                 <TextField
                   autoComplete="email"
                   name="email"
-                  variant="outlined"
+                  variant="filled"
+                  fullWidth
                   required
                   id="email"
                   label="Email"
                   autoFocus
                 />
               </Grid>
-              <Grid item>
+              <Grid item xs={12} sm={12}>
                 <TextField
                   autoComplete="userName"
                   name="userName"
-                  variant="outlined"
+                  variant="filled"
+                  fullWidth
                   required
                   id="userName"
                   label="User Name"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={12}>
                 <TextField
                   autoComplete="password"
                   name="password"
-                  variant="outlined"
+                  variant="filled"
+                  fullWidth
                   required
                   id="password"
                   label="Password"
                   type="password"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={12}>
                 <TextField
                   autoComplete="fullName"
                   name="fullName"
-                  variant="outlined"
+                  variant="filled"
+                  fullWidth
                   required
                   id="fullName"
                   label="Full Name"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={12}>
                 <TextField
                   autoComplete="contactNo"
                   name="contactNo"
-                  variant="outlined"
+                  variant="filled"
+                  fullWidth
                   id="contactNo"
                   label="Contact No"
-                  type="number"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="profileImage"
-                  name="profileImage"
-                  variant="outlined"
-                  fullWidth
-                  id="profileImage"
-                  label="Profile"
+                  type="telephone"
                 />
               </Grid>
             </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              className="signup-profile"
+            >
+              Upload Profile Picture
+            </Button>
             <Button
               type="submit"
               fullWidth

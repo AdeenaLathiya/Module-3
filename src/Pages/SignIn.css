@@ -5,34 +5,23 @@
   background-size: contain;
 }
 
-.signup-body {
-  margin-top: 50px;
+.signin-body {
+  margin-top: 150px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.signup-avatar {
+.signin-avatar {
   background-color: var(--twitter-color) !important;
 }
 
-.signup-form {
+.signin-form {
   width: 100%;
-  margin-top: 20px !important;
+  margin-bottom: 10px !important;
 }
 
-.signup-profile {
-  margin: 3px 0px 2px;
-  background-color: var(--twitter-bakground) !important;
-  border: none !important;
-  font-weight: 900 !important;
-  text-transform: inherit !important;
-  border-radius: 30px !important;
-  height: 50px !important;
-  margin-top: 20px !important;
-}
-
-.signup-submit {
+.signin-submit {
   margin: 3px 0px 2px;
   background-color: var(--twitter-color) !important;
   border: none !important;
