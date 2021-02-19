@@ -1,6 +1,8 @@
 import React from "react";
-import "./Widgets.css";
+
 import SearchIcon from "@material-ui/icons/Search";
+
+import "./Widgets.css";
 
 function Widgets() {
   return (

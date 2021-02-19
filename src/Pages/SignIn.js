@@ -1,13 +1,16 @@
 import React from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
+
+import { Link } from "react-router-dom";
+
+import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
+import Avatar from "@material-ui/core/Avatar";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+
 import "./SignIn.css";
 
 function SignIn() {
@@ -52,7 +55,7 @@ function SignIn() {
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                <Link variant="body2">Don't have an account? Sign Up</Link>
+                <Link to={"/signup"}>Don't have an account? Sign Up</Link>
               </Grid>
             </Grid>
           </form>

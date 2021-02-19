@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
-import "./Feed.css";
+
+import FlipMove from "react-flip-move";
+
+import firebaseApp from "../../firebase";
+
 import TweetBox from "./TweetBox";
 import Post from "./Post";
-import db from "../../firebase";
-import FlipMove from "react-flip-move";
+
+import "./Feed.css";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    db.collection("posts").onSnapshot((snapshot) => {
+    firebaseApp.collection("posts").onSnapshot((snapshot) => {
       setPosts(snapshot.docs.map((doc) => doc.data()));
     });
   }, []);
