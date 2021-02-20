@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Link, useHistory } from "react-router-dom";
+
 import TwitterIcon from "@material-ui/icons/Twitter";
 import SidebarOption from "./SidebarOption";
 import HomeIcon from "@material-ui/icons/Home";
@@ -15,8 +17,13 @@ function Sidebar() {
       <TwitterIcon className="sidebar-twitter-icon" />
 
       {/* Sidebar Option */}
-      <SidebarOption active Icon={HomeIcon} text="Home" />
-      <SidebarOption Icon={PersonIcon} text="Profile" />
+      <Link to="/">
+        <SidebarOption active Icon={HomeIcon} text="Home" />
+      </Link>
+
+      <Link to="/profile">
+        <SidebarOption Icon={PersonIcon} text="Profile" />
+      </Link>
 
       {/* Tweet Button */}
       <Button variant="outlined" className="sidebar-tweet" fullWidth>

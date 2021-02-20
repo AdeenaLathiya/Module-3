@@ -56,7 +56,8 @@ function TweetBox() {
       verified: verified,
       text: tweetMessage,
       image: tweetImage,
-      createdOn: Date(),
+      createdOn: Date,
+      // .now() / 3600
       creatyBy: userID,
       avatar: avatar,
     });
@@ -65,6 +66,7 @@ function TweetBox() {
     setTweetImage("");
     setAvatar("");
   };
+  
   return (
     <div className="tweetBox">
       <form>
@@ -87,7 +89,7 @@ function TweetBox() {
           className="tweetBox-imageInput"
           placeholder="Optional: Enter image URL"
           type="text"
-        />
+        /> 
 
         <PhotoLibraryIcon className="tweetBox-tweetPhoto" />
         <input onChange={onFileChange} type="file" />
