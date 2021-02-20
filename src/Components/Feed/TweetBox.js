@@ -82,7 +82,7 @@ function TweetBox() {
           type="text"
         />
 
-        <PhotoLibraryIcon />
+        <PhotoLibraryIcon className="tweetBox-tweetPhoto" />
         <input onChange={onFileChange} type="file" />
 
         <Button

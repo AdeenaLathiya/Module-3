@@ -1,6 +1,6 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import firebaseApp from "../firebase";
 
@@ -21,67 +21,77 @@ function SignUp() {
   const [avatar, setAvatar] = useState("");
   const [fullName, setFullName] = useState("");
   const [userName, setUserName] = useState("");
-  const [contactNo, setContactNo] = useState("");
+  const [contactNo, setContactNo] = useState(0);
   const [password, setPassword] = useState("");
 
-  firebaseApp
-    .auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then((user) => {
-      var data = {
-        fullName: fullName,
-        contactNo: contactNo,
-        userName: userName,
-        email: email,
-        avatar: avatar,
-        verified: false,
-      };
-
-      var db = firebaseApp.firestore.collection("users").doc(user.user.uid);
-      db.set(data);
-    });
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     email: "",
-  //     userName: "",
-  //     password: "",
-  //     fullName: "",
-  //     contactNo: "",
-  //     profile: "",
-  //   };
-  // }
-
-  // updateInput = (e) => {
-  //   this.setState({
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
-
-  // addUser = (e) => {
-  //   e.preventDefault();
-
-  //   this.setState({
-  //     email: "",
-  //     userName: "",
-  //     password: "",
-  //     fullName: "",
-  //     contactNo: "",
-  //     profile: "",
-  //   });
-  // };
+  const history = useHistory();
 
   const onFileChange = async (e) => {
     const file = e.target.files[0];
-    const storageRef = firebaseApp.storage.ref();
+    const storageRef = firebaseApp.storage().ref("profile/");
     const fileRef = storageRef.child(file.name);
     await fileRef.put(file);
-    const fileURL = await fileRef.getDownloadURL();
+    setAvatar(await fileRef.getDownloadURL());
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    firebaseApp
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((user) => {
+        var data = {
+          fullName: fullName,
+          contactNo: contactNo,
+          userName: userName,
+          email: email,
+          avatar: avatar,
+          verified: false,
+        };
+
+        var db = firebaseApp.firestore.collection("users").doc(user.user.uid);
+        db.set(data);
+      })
+      .catch((err) => {
+        var errorCode = err.code;
+        var errorMessage = err.message;
+
+        console.log(errorCode, "\n", errorMessage);
+      });
+
+    history.replace("/");
+    // firebaseApp.firestore().collection("users").add({
+    //   userName: userName,
+    //   fullName: fullName,
+    //   email: email,
+    //   password: password,
+    //   avatar: avatar,
+    //   contactNo: contactNo,
+    // });
   };
+
+  // firebaseApp.auth().onAuthStateChanged((user) => {
+  //   if (user) console.log("Signed In");
+  //   var userID = firebaseApp.auth().currentUser.uid;
+  //   const userRef = firebaseApp.firestore().collection("users").doc(userID);
+  //   userRef
+  //     .get()
+  //     .then((doc) => {
+  //       if (doc.exists) {
+  //         console.log("Doc data: ", doc.data());
+
+  //         const data = doc.data();
+  //         setFullName(data.fullName);
+  //         setUserName(data.userName);
+  //         setEmail(data.email);
+  //         setAvatar(data.avatar);
+  //         setContactNo(data.contactNo);
+  //         setPassword(data.password);
+  //       } else console.log("No Data");
+  //     })
+  //     .catch((err) => console.log("Error"));
+  // });
 
   // render() {
   return (
@@ -95,19 +105,20 @@ function SignUp() {
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
-          <form className="signup-form" onSubmit={this.onSubmit}>
+          <form className="signup-form" onSubmit={onSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
                 <TextField
                   autoComplete="email"
                   name="email"
+                  type="email"
                   variant="filled"
                   fullWidth
                   required
                   id="email"
                   label="Email"
                   autoFocus
-                  // onChange={this.updateInput}
+                  onChange={(e) => setEmail(e.target.value)}
                   // value={this.state.email}
                 />
               </Grid>
@@ -120,6 +131,7 @@ function SignUp() {
                   required
                   id="userName"
                   label="User Name"
+                  onChange={(e) => setUserName(e.target.value)}
                   // onChange={this.updateInput}
                   // value={this.state.userName}
                 />
@@ -134,6 +146,7 @@ function SignUp() {
                   id="password"
                   label="Password"
                   type="password"
+                  onChange={(e) => setPassword(e.target.value)}
                   // onChange={this.updateInput}
                   // value={this.state.password}
                 />
@@ -147,6 +160,7 @@ function SignUp() {
                   required
                   id="fullName"
                   label="Full Name"
+                  onChange={(e) => setFullName(e.target.value)}
                   // onChange={this.updateInput}
                   // value={this.state.fullName}
                 />
@@ -160,6 +174,7 @@ function SignUp() {
                   id="contactNo"
                   label="Contact No"
                   type="telephone"
+                  onChange={(e) => setContactNo(e.target.value)}
                   // onChange={this.updateInput}
                   // value={this.state.contactNo}
                 />
@@ -174,7 +189,7 @@ function SignUp() {
               // value={this.state.profile}
             >
               Upload Profile Picture
-              <Input type="file" onChange={this.onFileChange} />
+              <Input type="file" onChange={onFileChange} name="avatar" />
             </Button>
 
             <Button

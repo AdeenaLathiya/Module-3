@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+
+import firebaseApp from "../firebase";
 
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,6 +16,72 @@ import Button from "@material-ui/core/Button";
 import "./SignIn.css";
 
 function SignIn() {
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const history = useHistory();
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    const emailAt = userName.indexOf("@");
+    const emailDot = userName.lastIndexOf(".");
+
+    if (
+      emailAt < 1 ||
+      emailDot < emailAt + 2 ||
+      emailDot + 2 >= userName.length
+    ) {
+      const userRef = firebaseApp
+        .firestore()
+        .collection("users")
+        .where("userName", "==", userName);
+
+      console.log(userName);
+
+      userRef
+        .get()
+        .then((querySnapshot) => {
+          if (querySnapshot.size > 0) {
+            console.log(querySnapshot.docs[0].id);
+
+            const emailDB = querySnapshot.docs[0].data().email;
+
+            firebaseApp
+              .auth()
+              .signInWithEmailAndPassword(emailDB, password)
+              .then((userCred) => {
+                // const user = userCred.user;
+                history.replace("/");
+              })
+              .catch((err) => {
+                var errorCode = err.code;
+                var errorMessage = err.message;
+
+                console.log(errorCode, "\n", errorMessage);
+              });
+          } else console.log("No Data");
+        })
+        .catch((err) => {
+          console.log("Error");
+        });
+    } else {
+      firebaseApp
+        .auth()
+        .signInWithEmailAndPassword(userName, password)
+        .then((userCred) => {
+          // const user = userCred.user;
+          history.replace("/");
+        })
+        .catch((err) => {
+          var errorCode = err.code;
+          var errorMessage = err.message;
+
+          console.log(errorCode, "\n", errorMessage);
+        });
+    }
+  };
+
   return (
     <div className="body">
       <Container component="main" maxWidth="xs">
@@ -25,7 +93,7 @@ function SignIn() {
           <Typography component="h1" variant="h5">
             Sign In
           </Typography>
-          <form className="signin-form">
+          <form className="signin-form" onSubmit={onSubmit}>
             <TextField
               variant="filled"
               margin="normal"
@@ -34,6 +102,9 @@ function SignIn() {
               id="email/userName"
               label="Email/User Name"
               autoFocus
+              onChange={(e) => {
+                setUserName(e.target.value);
+              }}
             />
             <TextField
               variant="filled"
@@ -44,6 +115,9 @@ function SignIn() {
               label="Password"
               type="password"
               id="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
             <Button
               type="submit"

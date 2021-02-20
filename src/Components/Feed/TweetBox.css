@@ -26,6 +26,11 @@
   padding: 10px;
 }
 
+.tweetBox-tweetPhoto {
+  color: var(--twitter-color) !important;
+  cursor: pointer;
+}
+
 .tweetBox-tweetButton {
   background-color: var(--twitter-color) !important;
   border: none !important;
