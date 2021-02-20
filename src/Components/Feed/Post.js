@@ -27,7 +27,7 @@ const Post = forwardRef(
                 <span className="post-headerSpecial">
                   {verified && <VerifiedUserIcon className="post-badge" />} @
                   {userName}
-                  {createdOn}
+                  {/* {createdOn} */}
                 </span>
               </h3>
             </div>
