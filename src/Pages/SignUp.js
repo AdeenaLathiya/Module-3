@@ -18,17 +18,19 @@ import "./SignUp.css";
 
 function SignUp() {
   const [email, setEmail] = useState("");
-  const [avatar, setAvatar] = useState("");
   const [fullName, setFullName] = useState("");
-  const [userName, setUserName] = useState("");
   const [contactNo, setContactNo] = useState(0);
+  const [avatar, setAvatar] = useState("");
   const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("");
 
   const history = useHistory();
 
   const onFileChange = async (e) => {
+    e.preventDefault();
+
     const file = e.target.files[0];
-    const storageRef = firebaseApp.storage().ref("profile/");
+    const storageRef = firebaseApp.storage().ref("avatar/");
     const fileRef = storageRef.child(file.name);
     await fileRef.put(file);
     setAvatar(await fileRef.getDownloadURL());
@@ -50,7 +52,7 @@ function SignUp() {
           verified: false,
         };
 
-        var db = firebaseApp.firestore.collection("users").doc(user.user.uid);
+        var db = firebaseApp.firestore().collection("users").doc(user.user.uid);
         db.set(data);
       })
       .catch((err) => {
@@ -61,39 +63,8 @@ function SignUp() {
       });
 
     history.replace("/");
-    // firebaseApp.firestore().collection("users").add({
-    //   userName: userName,
-    //   fullName: fullName,
-    //   email: email,
-    //   password: password,
-    //   avatar: avatar,
-    //   contactNo: contactNo,
-    // });
   };
 
-  // firebaseApp.auth().onAuthStateChanged((user) => {
-  //   if (user) console.log("Signed In");
-  //   var userID = firebaseApp.auth().currentUser.uid;
-  //   const userRef = firebaseApp.firestore().collection("users").doc(userID);
-  //   userRef
-  //     .get()
-  //     .then((doc) => {
-  //       if (doc.exists) {
-  //         console.log("Doc data: ", doc.data());
-
-  //         const data = doc.data();
-  //         setFullName(data.fullName);
-  //         setUserName(data.userName);
-  //         setEmail(data.email);
-  //         setAvatar(data.avatar);
-  //         setContactNo(data.contactNo);
-  //         setPassword(data.password);
-  //       } else console.log("No Data");
-  //     })
-  //     .catch((err) => console.log("Error"));
-  // });
-
-  // render() {
   return (
     <div className="body">
       <Container component="main" maxWidth="xs">
@@ -105,7 +76,7 @@ function SignUp() {
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
-          <form className="signup-form" onSubmit={onSubmit}>
+          <form method="POST" className="signup-form" onSubmit={onSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
                 <TextField
@@ -119,7 +90,6 @@ function SignUp() {
                   label="Email"
                   autoFocus
                   onChange={(e) => setEmail(e.target.value)}
-                  // value={this.state.email}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -132,8 +102,6 @@ function SignUp() {
                   id="userName"
                   label="User Name"
                   onChange={(e) => setUserName(e.target.value)}
-                  // onChange={this.updateInput}
-                  // value={this.state.userName}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -147,8 +115,6 @@ function SignUp() {
                   label="Password"
                   type="password"
                   onChange={(e) => setPassword(e.target.value)}
-                  // onChange={this.updateInput}
-                  // value={this.state.password}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -161,8 +127,6 @@ function SignUp() {
                   id="fullName"
                   label="Full Name"
                   onChange={(e) => setFullName(e.target.value)}
-                  // onChange={this.updateInput}
-                  // value={this.state.fullName}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -175,8 +139,6 @@ function SignUp() {
                   label="Contact No"
                   type="telephone"
                   onChange={(e) => setContactNo(e.target.value)}
-                  // onChange={this.updateInput}
-                  // value={this.state.contactNo}
                 />
               </Grid>
             </Grid>
@@ -185,8 +147,6 @@ function SignUp() {
               fullWidth
               variant="contained"
               className="signup-profile"
-              // onChange={this.updateInput}
-              // value={this.state.profile}
             >
               Upload Profile Picture
               <Input type="file" onChange={onFileChange} name="avatar" />
@@ -210,7 +170,6 @@ function SignUp() {
       </Container>
     </div>
   );
-  // }
 }
 
 export default SignUp;

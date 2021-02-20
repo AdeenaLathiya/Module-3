@@ -17,29 +17,31 @@ function TweetBox() {
   const [userID, setUserID] = useState("");
 
   firebaseApp.auth().onAuthStateChanged((user) => {
-    if (user) console.log("Signed In");
-    var userID = firebaseApp.auth().currentUser.uid;
-    const userRef = firebaseApp.firestore().collection("users").doc(userID);
-    userRef
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          console.log("Doc data: ", doc.data());
+    if (user) {
+      console.log("Signed In");
+      var userID = firebaseApp.auth().currentUser.uid;
+      const userRef = firebaseApp.firestore().collection("users").doc(userID);
+      userRef
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            console.log("Doc data: ", doc.data());
 
-          const data = doc.data();
-          setFullName(data.fullName);
-          setUserName(data.userName);
-          setVerified(data.verified);
-          setAvatar(data.avatar);
-          setUserID(userID);
-        } else console.log("No Data");
-      })
-      .catch((err) => console.log("Error"));
+            const data = doc.data();
+            setFullName(data.fullName);
+            setUserName(data.userName);
+            setVerified(data.verified);
+            setAvatar(data.avatar);
+            setUserID(userID);
+          } else console.log("No Data");
+        })
+        .catch((err) => console.log("Error"));
+    }
   });
 
   const onFileChange = async (e) => {
     const file = e.target.files[0];
-    const storageRef = firebaseApp.storage.ref("postImage/");
+    const storageRef = firebaseApp.storage().ref("postImage/");
     const fileRef = storageRef.child(file.name);
     await fileRef.put(file);
     setTweetImage(await fileRef.getDownloadURL());
@@ -61,6 +63,7 @@ function TweetBox() {
 
     setTweetMessage("");
     setTweetImage("");
+    setAvatar("");
   };
   return (
     <div className="tweetBox">
@@ -68,14 +71,18 @@ function TweetBox() {
         <div className="tweetBox-input">
           <Avatar src={avatar} />
           <input
-            onChange={(e) => setTweetMessage(e.target.value)}
+            onChange={(e) => {
+              setTweetMessage(e.target.value);
+            }}
             value={tweetMessage}
             placeholder="What's happening?"
             type="text"
           />
         </div>
         <input
-          onChange={(e) => setTweetImage(e.target.value)}
+          onChange={(e) => {
+            setTweetImage(e.target.value);
+          }}
           value={tweetImage}
           className="tweetBox-imageInput"
           placeholder="Optional: Enter image URL"

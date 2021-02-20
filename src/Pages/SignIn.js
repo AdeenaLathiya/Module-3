@@ -51,7 +51,7 @@ function SignIn() {
               .auth()
               .signInWithEmailAndPassword(emailDB, password)
               .then((userCred) => {
-                // const user = userCred.user;
+                const user = userCred.user;
                 history.replace("/");
               })
               .catch((err) => {
@@ -70,7 +70,7 @@ function SignIn() {
         .auth()
         .signInWithEmailAndPassword(userName, password)
         .then((userCred) => {
-          // const user = userCred.user;
+          const user = userCred.user;
           history.replace("/");
         })
         .catch((err) => {
@@ -93,7 +93,7 @@ function SignIn() {
           <Typography component="h1" variant="h5">
             Sign In
           </Typography>
-          <form className="signin-form" onSubmit={onSubmit}>
+          <form method="POST" className="signin-form" onSubmit={onSubmit}>
             <TextField
               variant="filled"
               margin="normal"

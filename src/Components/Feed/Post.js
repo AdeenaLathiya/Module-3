@@ -10,7 +10,10 @@ import PublishIcon from "@material-ui/icons/Publish";
 import "./Post.css";
 
 const Post = forwardRef(
-  ({ displayName, userName, verified, text, image, avatar }, ref) => {
+  (
+    { displayName, userName, verified, text, image, avatar, createdOn },
+    ref
+  ) => {
     return (
       <div className="post" ref={ref}>
         <div className="post-avatar">
@@ -24,6 +27,7 @@ const Post = forwardRef(
                 <span className="post-headerSpecial">
                   {verified && <VerifiedUserIcon className="post-badge" />} @
                   {userName}
+                  {createdOn}
                 </span>
               </h3>
             </div>
