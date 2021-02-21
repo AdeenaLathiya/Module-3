@@ -60,7 +60,10 @@ function SignIn() {
 
                 console.log(errorCode, "\n", errorMessage);
               });
-          } else console.log("No Data");
+          } else {
+            console.log("No Data");
+            alert("User Already Exists");
+          }
         })
         .catch((err) => {
           console.log("Error");

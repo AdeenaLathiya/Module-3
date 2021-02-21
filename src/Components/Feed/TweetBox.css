@@ -21,6 +21,10 @@
   border: none;
 }
 
+.tweetBox-Avatar{
+  cursor: pointer;
+}
+
 .tweetBox-imageInput {
   border: none;
   padding: 10px;

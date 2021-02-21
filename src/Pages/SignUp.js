@@ -23,6 +23,7 @@ function SignUp() {
   const [avatar, setAvatar] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
+  // const [status, setStatus] = useState("");
 
   const history = useHistory();
 
@@ -50,10 +51,14 @@ function SignUp() {
           email: email,
           avatar: avatar,
           verified: false,
+          // createdOn: Date,
+          // status: "",
         };
 
         var db = firebaseApp.firestore().collection("users").doc(user.user.uid);
         db.set(data);
+
+        console.log("thiuss");
       })
       .catch((err) => {
         var errorCode = err.code;

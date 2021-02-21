@@ -18,7 +18,7 @@ function TweetBox() {
 
   firebaseApp.auth().onAuthStateChanged((user) => {
     if (user) {
-      console.log("Signed In");
+      console.log("Signed In", firebaseApp.auth().currentUser.uid);
       var userID = firebaseApp.auth().currentUser.uid;
       const userRef = firebaseApp.firestore().collection("users").doc(userID);
       userRef
@@ -66,12 +66,12 @@ function TweetBox() {
     setTweetImage("");
     setAvatar("");
   };
-  
+
   return (
     <div className="tweetBox">
       <form>
         <div className="tweetBox-input">
-          <Avatar src={avatar} />
+          <Avatar src={avatar} className="tweetBox-Avatar" />
           <input
             onChange={(e) => {
               setTweetMessage(e.target.value);
@@ -89,7 +89,7 @@ function TweetBox() {
           className="tweetBox-imageInput"
           placeholder="Optional: Enter image URL"
           type="text"
-        /> 
+        />
 
         <PhotoLibraryIcon className="tweetBox-tweetPhoto" />
         <input onChange={onFileChange} type="file" />

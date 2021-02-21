@@ -2,7 +2,6 @@ import React from "react";
 
 import ProfileBox from "../ProfileMain/ProfileBox";
 import ProfileNav from "../ProfileMain/ProfileNav";
-// import TweetBox from "../Feed/TweetBox";
 
 import "./ProfileMain.css";
 
@@ -14,7 +13,7 @@ function Profile() {
         <h2>Profile</h2>
       </div>
 
-      {/* TweetBox */}
+      {/* ProfileBox */}
       <ProfileBox />
 
       {/* ProfileNav */}
