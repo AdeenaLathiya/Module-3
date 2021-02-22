@@ -58,7 +58,7 @@ function SignUp() {
         var db = firebaseApp.firestore().collection("users").doc(user.user.uid);
         db.set(data);
 
-        console.log("thiuss");
+        console.log("User Created");
       })
       .catch((err) => {
         var errorCode = err.code;

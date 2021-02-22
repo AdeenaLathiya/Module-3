@@ -34,21 +34,61 @@ function ProfileBox() {
   const handleClose = () => {
     setOpen(false);
 
-    firebaseApp.auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log("Signed In", firebaseApp.auth().currentUser.uid);
-        var userID = firebaseApp.auth().currentUser.uid;
-        const userRef = firebaseApp.firestore().collection("users").doc(userID);
-        userRef
-          .update({
-            // fullName: fullName,
-            // contactNo: contactNo,
-            // status: status,
-            // avatar: avatar,
-          })
-          .catch((err) => console.log("Error Updating"));
-      }
-    });
+    // firebaseApp
+    //   .auth()
+    //   .onAuthStateChanged((user) => {
+    //     var data = {
+    //       avatar: avatar,
+    //       contactNo: contactNo,
+    //       email: email,
+    //       fullName: fullName,
+    //       status: "",
+    //       userName: userName,
+    //       verified: false,
+    //     };
+
+    //     var db = firebaseApp().collection("users").doc(user.user.uid);
+    //     db.set(data);
+
+    //     console.log("Updated");
+    //   })
+    //   .catch((err) => {
+    //     var errorCode = err.code;
+    //     var errorMessage = err.message;
+
+    //     console.log(errorCode, "\n", errorMessage);
+    //   });
+
+    // firebaseApp.auth().onAuthStateChanged((user) => {
+    //   if (user) {
+    //     console.log("Signed In", firebaseApp.auth().currentUser.uid);
+    //     var userID = firebaseApp.auth().currentUser.uid;
+    //     const userRef = firebaseApp.firestore().collection("users").doc(userID);
+    //     userRef.get().then((doc) => {
+    //       if (doc.exists) {
+    //         console.log("Doc data: ", doc.data());
+
+    //         setFullName(fullName);
+    //         setUserName(userName);
+    //         setAvatar(avatar);
+    //         setEmail(email);
+    //         setContactNo(contactNo);
+    //         setStatus(status);
+    //         setCreatedOn(createdOn);
+    //         setUserID(userID);
+    //       }
+    //     });
+    //     // .update({
+    //     //   avatar: avatar,
+    //     //   contactNo: contactNo,
+    //     //   email: email,
+    //     //   fullName: fullName,
+    //     //   status: status,
+    //     //   userName: userName,
+    //     // })
+    //     // .catch((err) => console.log("Error Updating"));
+    //   }
+    // });
   };
 
   // userRef
@@ -139,8 +179,9 @@ function ProfileBox() {
               </Button>
             </div>
             <form
-              // method="POST"
+              method="POST"
               className="modal-formEdit"
+              onSubmit={handleClose}
             >
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={12}>
@@ -180,6 +221,7 @@ function ProfileBox() {
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <TextField
+                    autoComplete="fullName"
                     name="fullName"
                     // type="email"
                     variant="outlined"
@@ -197,7 +239,7 @@ function ProfileBox() {
                     fullWidth
                     label="Status"
                     value={status}
-                    // onChange={(e) => setStatus(e.target.value)}
+                    onChange={(e) => setStatus(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12} sm={12}>
@@ -208,10 +250,18 @@ function ProfileBox() {
                     fullWidth
                     label="Contact No."
                     value={contactNo}
-                    onChange={(e) => setContactNo(e.target.value)}
+                    // onChange={(e) => setContactNo(e.target.value)}
                   />
                 </Grid>
               </Grid>
+              <Button
+                endIcon={<DoneIcon />}
+                variant="outlined"
+                className="modal-editBtn"
+                // onClick={handleClose}
+              >
+                Save Changes
+              </Button>
             </form>
           </div>
         </Fade>

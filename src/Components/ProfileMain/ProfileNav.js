@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 
-import RestoreIcon from "@material-ui/icons/Restore";
+// import RestoreIcon from "@material-ui/icons/Restore";
+import TwitterIcon from "@material-ui/icons/Twitter";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
+import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
+// import LocationOnIcon from "@material-ui/icons/LocationOn";
+
+import followers from "../followers/followers";
+import following from "../following/following";
+import myTweets from "../myTweets/myTweets";
+import likedTweets from "../likedTweets/likedTweets";
 
 import "./ProfileNav.css";
 
 function ProfileNav() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   return (
     <div>
@@ -22,9 +29,22 @@ function ProfileNav() {
         showLabels
         className="profileNav-body"
       >
-        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-        <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+        <BottomNavigationAction
+          label="My Tweets"
+          icon={<TwitterIcon />}
+          onChange={<myTweets />}
+        />
+
+        <BottomNavigationAction label="Liked Tweets" icon={<FavoriteIcon />} />
+
+        <BottomNavigationAction
+          label="Followers"
+          icon={<SupervisedUserCircleIcon />}
+        />
+        <BottomNavigationAction
+          label="Following"
+          icon={<SupervisedUserCircleIcon />}
+        />
       </BottomNavigation>
     </div>
   );
