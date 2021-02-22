@@ -45,14 +45,14 @@ function SignUp() {
       .createUserWithEmailAndPassword(email, password)
       .then((user) => {
         var data = {
-          fullName: fullName,
-          contactNo: contactNo,
-          userName: userName,
-          email: email,
           avatar: avatar,
+          contactNo: contactNo,
+          email: email,
+          fullName: fullName,
+          status: "",
+          userName: userName,
           verified: false,
           // createdOn: Date,
-          // status: "",
         };
 
         var db = firebaseApp.firestore().collection("users").doc(user.user.uid);

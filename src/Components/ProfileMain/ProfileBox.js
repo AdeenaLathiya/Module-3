@@ -34,32 +34,41 @@ function ProfileBox() {
   const handleClose = () => {
     setOpen(false);
 
-    // firebaseApp.auth().onAuthStateChanged((user) => {
-    //   if (user) {
-    //     console.log("Signed In", firebaseApp.auth().currentUser.uid);
-    //     var userID = firebaseApp.auth().currentUser.uid;
-    //     const userRef = firebaseApp.firestore().collection("users").doc(userID);
-    //     userRef
-    //       .get()
-    //       .then((doc) => {
-    //         if (doc.exists) {
-    //           console.log("Doc data: ", doc.data());
-
-    //           const data = doc.data();
-    //           setFullName(data.fullName);
-    //           setUserName(data.userName);
-    //           setAvatar(data.avatar);
-    //           setEmail(data.email);
-    //           setContactNo(data.contactNo);
-    //           setStatus(data.status);
-    //           setCreatedOn(data.createdOn);
-    //           setUserID(userID);
-    //         } else console.log("No Data");
-    //       })
-    //       .catch((err) => console.log("Error"));
-    //   }
-    // });
+    firebaseApp.auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log("Signed In", firebaseApp.auth().currentUser.uid);
+        var userID = firebaseApp.auth().currentUser.uid;
+        const userRef = firebaseApp.firestore().collection("users").doc(userID);
+        userRef
+          .update({
+            // fullName: fullName,
+            // contactNo: contactNo,
+            // status: status,
+            // avatar: avatar,
+          })
+          .catch((err) => console.log("Error Updating"));
+      }
+    });
   };
+
+  // userRef
+  // .get()
+  // .then((doc) => {
+  //   if (doc.exists) {
+  //     console.log("Doc data: ", doc.data());
+
+  //     const data = doc.data();
+  //     setFullName(data.fullName);
+  //     setUserName(data.userName);
+  //     setAvatar(data.avatar);
+  //     setEmail(data.email);
+  //     setContactNo(data.contactNo);
+  //     setStatus(data.status);
+  //     setCreatedOn(data.createdOn);
+  //     setUserID(userID);
+  //   } else console.log("No Data");
+  // })
+  // .catch((err) => console.log("Error"));
 
   firebaseApp.auth().onAuthStateChanged((user) => {
     if (user) {
@@ -73,12 +82,12 @@ function ProfileBox() {
             console.log("Doc data: ", doc.data());
 
             const data = doc.data();
-            setFullName(data.fullName);
-            setUserName(data.userName);
             setAvatar(data.avatar);
-            setEmail(data.email);
             setContactNo(data.contactNo);
+            setEmail(data.email);
+            setFullName(data.fullName);
             setStatus(data.status);
+            setUserName(data.userName);
             setCreatedOn(data.createdOn);
             setUserID(userID);
           } else console.log("No Data");
@@ -188,7 +197,7 @@ function ProfileBox() {
                     fullWidth
                     label="Status"
                     value={status}
-                    onChange={(e) => setStatus(e.target.value)}
+                    // onChange={(e) => setStatus(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12} sm={12}>
