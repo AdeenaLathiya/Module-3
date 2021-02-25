@@ -23,6 +23,7 @@ function ProfileBox() {
   const [status, setStatus] = useState("");
   const [userName, setUserName] = useState("");
   const [createdOn, setCreatedOn] = useState("");
+  const [verified, setVerified] = useState("false");
   const [userID, setUserID] = useState("");
 
   const [open, setOpen] = useState(false);
@@ -33,62 +34,37 @@ function ProfileBox() {
 
   const handleClose = () => {
     setOpen(false);
+  };
 
-    // firebaseApp
-    //   .auth()
-    //   .onAuthStateChanged((user) => {
-    //     var data = {
-    //       avatar: avatar,
-    //       contactNo: contactNo,
-    //       email: email,
-    //       fullName: fullName,
-    //       status: "",
-    //       userName: userName,
-    //       verified: false,
-    //     };
+  const onFileChange = async (e) => {
+    e.preventDefault();
 
-    //     var db = firebaseApp().collection("users").doc(user.user.uid);
-    //     db.set(data);
+    const file = e.target.files[0];
+    const storageRef = firebaseApp.storage().ref("avatar/");
+    const fileRef = storageRef.child(file.name);
+    await fileRef.put(file);
+    setAvatar(await fileRef.getDownloadURL());
+  };
 
-    //     console.log("Updated");
-    //   })
-    //   .catch((err) => {
-    //     var errorCode = err.code;
-    //     var errorMessage = err.message;
+  const onSubmit = (e) => {
+    e.preventDefault();
 
-    //     console.log(errorCode, "\n", errorMessage);
-    //   });
+    var data = {
+      avatar: avatar,
+      contactNo: contactNo,
+      email: email,
+      fullName: fullName,
+      status: status,
+      userName: userName,
+      verified: verified,
+    };
 
-    // firebaseApp.auth().onAuthStateChanged((user) => {
-    //   if (user) {
-    //     console.log("Signed In", firebaseApp.auth().currentUser.uid);
-    //     var userID = firebaseApp.auth().currentUser.uid;
-    //     const userRef = firebaseApp.firestore().collection("users").doc(userID);
-    //     userRef.get().then((doc) => {
-    //       if (doc.exists) {
-    //         console.log("Doc data: ", doc.data());
+    var db = firebaseApp.firestore().collection("users").doc(userID);
+    db.set(data);
 
-    //         setFullName(fullName);
-    //         setUserName(userName);
-    //         setAvatar(avatar);
-    //         setEmail(email);
-    //         setContactNo(contactNo);
-    //         setStatus(status);
-    //         setCreatedOn(createdOn);
-    //         setUserID(userID);
-    //       }
-    //     });
-    //     // .update({
-    //     //   avatar: avatar,
-    //     //   contactNo: contactNo,
-    //     //   email: email,
-    //     //   fullName: fullName,
-    //     //   status: status,
-    //     //   userName: userName,
-    //     // })
-    //     // .catch((err) => console.log("Error Updating"));
-    //   }
-    // });
+    console.log("Updated");
+
+    handleClose();
   };
 
   // userRef
@@ -142,9 +118,9 @@ function ProfileBox() {
         <Avatar className="profileBox-inputAvatar" src={avatar} />
       </div>
       <h3>{fullName}</h3>
-      <p>{`@${userName}`}</p>
-      <p>{`${status}`}</p>
-      <p>{`${createdOn}`}</p>
+      <h5>{`@${userName}`}</h5>
+      <p>{`Status: ${status}`}</p>
+      <p>{`Created On: ${createdOn}`}</p>
       <Button
         startIcon={<EditIcon />}
         variant="outlined"
@@ -169,20 +145,16 @@ function ProfileBox() {
           <div className="profileBox-modalFade">
             <div className="modalHeader">
               <h2>Edit Profile</h2>
-              <Button
+              {/* <Button
                 endIcon={<DoneIcon />}
                 variant="outlined"
                 className="modal-editBtn"
-                onClick={handleClose}
+                // onClick={handleClose}
               >
                 Save Changes
-              </Button>
+              </Button> */}
             </div>
-            <form
-              method="POST"
-              className="modal-formEdit"
-              onSubmit={handleClose}
-            >
+            <form method="POST" className="modal-formEdit" onSubmit={onSubmit}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={12}>
                   <div
@@ -194,6 +166,7 @@ function ProfileBox() {
                       className="modal-inputAvatar"
                       src={avatar}
                     />
+                    <Input type="file" onChange={onFileChange} name="avatar" />
                     {/* </EditIcon> */}
                   </div>
                 </Grid>
@@ -250,11 +223,12 @@ function ProfileBox() {
                     fullWidth
                     label="Contact No."
                     value={contactNo}
-                    // onChange={(e) => setContactNo(e.target.value)}
+                    onChange={(e) => setContactNo(e.target.value)}
                   />
                 </Grid>
               </Grid>
               <Button
+                type="submit"
                 endIcon={<DoneIcon />}
                 variant="outlined"
                 className="modal-editBtn"

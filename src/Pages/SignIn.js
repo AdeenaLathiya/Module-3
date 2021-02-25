@@ -18,6 +18,10 @@ import "./SignIn.css";
 function SignIn() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [contactNo, setContactNo] = useState(0);
+  const [avatar, setAvatar] = useState("");
 
   const history = useHistory();
 

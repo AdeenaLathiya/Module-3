@@ -23,7 +23,8 @@ function SignUp() {
   const [avatar, setAvatar] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
-  // const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("");
+  const [createdOn, setCreatedOn] = useState("");
 
   const history = useHistory();
 
@@ -49,10 +50,10 @@ function SignUp() {
           contactNo: contactNo,
           email: email,
           fullName: fullName,
-          status: "",
+          status: status,
           userName: userName,
           verified: false,
-          // createdOn: Date,
+          createdOn: Date(),
         };
 
         var db = firebaseApp.firestore().collection("users").doc(user.user.uid);

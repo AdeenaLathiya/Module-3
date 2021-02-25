@@ -13,9 +13,13 @@ function Feed() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    firebaseApp.firestore().collection("posts").onSnapshot((snapshot) => {
-      setPosts(snapshot.docs.map((doc) => doc.data()));
-    });
+    firebaseApp
+      .firestore()
+      .collection("posts")
+      // .orderBy("", "asc")
+      .onSnapshot((snapshot) => {
+        setPosts(snapshot.docs.map((doc) => doc.data()));
+      });
   }, []);
 
   return (

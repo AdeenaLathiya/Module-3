@@ -16,6 +16,8 @@ function TweetBox() {
   const [verified, setVerified] = useState("false");
   const [userID, setUserID] = useState("");
 
+  // console.log(firebaseApp.firebase_.firestore.Timestamp.fromDate);
+
   firebaseApp.auth().onAuthStateChanged((user) => {
     if (user) {
       console.log("Signed In", firebaseApp.auth().currentUser.uid);
@@ -56,7 +58,7 @@ function TweetBox() {
       verified: verified,
       text: tweetMessage,
       image: tweetImage,
-      createdOn: Date,
+      createdOn: Date(),
       // .now() / 3600
       creatyBy: userID,
       avatar: avatar,

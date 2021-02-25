@@ -7,6 +7,8 @@ import RepeatIcon from "@material-ui/icons/Repeat";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import PublishIcon from "@material-ui/icons/Publish";
 
+import firebaseApp from "../../firebase";
+
 import "./Post.css";
 
 const Post = forwardRef(
@@ -27,7 +29,9 @@ const Post = forwardRef(
                 <span className="post-headerSpecial">
                   {verified && <VerifiedUserIcon className="post-badge" />} @
                   {userName}
-                  {/* {createdOn} */}
+                  {/* {`${firebaseApp.firebase_.firestore.Timestamp.fromDate(
+                    createdOn
+                  )}`} */}
                 </span>
               </h3>
             </div>
