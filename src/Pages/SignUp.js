@@ -23,8 +23,8 @@ function SignUp() {
   const [avatar, setAvatar] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
-  const [status, setStatus] = useState("");
-  const [createdOn, setCreatedOn] = useState("");
+  // const [status, setStatus] = useState("");
+  // const [createdOn, setCreatedOn] = useState("");
 
   const history = useHistory();
 
@@ -41,34 +41,49 @@ function SignUp() {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    firebaseApp
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((user) => {
-        var data = {
-          avatar: avatar,
-          contactNo: contactNo,
-          email: email,
-          fullName: fullName,
-          status: status,
-          userName: userName,
-          verified: false,
-          createdOn: Date(),
-        };
+    const ref = firebaseApp
+      .firestore()
+      .collection("users")
+      .where("userName", "==", userName)
+      .get();
 
-        var db = firebaseApp.firestore().collection("users").doc(user.user.uid);
-        db.set(data);
+    ref.then((querySnapshot) => {
+      if (querySnapshot.size > 0) {
+        alert("Account Already Exists");
+      } else {
+        firebaseApp
+          .auth()
+          .createUserWithEmailAndPassword(email, password)
+          .then((user) => {
+            var data = {
+              avatar: avatar,
+              contactNo: contactNo,
+              email: email,
+              fullName: fullName,
+              status: "",
+              userName: userName,
+              verified: false,
+              // createdOn: Date(),
+            };
 
-        console.log("User Created");
-      })
-      .catch((err) => {
-        var errorCode = err.code;
-        var errorMessage = err.message;
+            var db = firebaseApp
+              .firestore()
+              .collection("users")
+              .doc(user.user.uid);
+            db.set(data);
 
-        console.log(errorCode, "\n", errorMessage);
-      });
+            console.log("User Created");
+          })
+          .catch((err) => {
+            var errorCode = err.code;
+            var errorMessage = err.message;
 
-    history.replace("/");
+            console.log(errorCode, "\n", errorMessage);
+          });
+
+        history.replace("/");
+      }
+    });
   };
 
   return (
@@ -95,7 +110,9 @@ function SignUp() {
                   id="email"
                   label="Email"
                   autoFocus
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -107,7 +124,9 @@ function SignUp() {
                   required
                   id="userName"
                   label="User Name"
-                  onChange={(e) => setUserName(e.target.value)}
+                  onChange={(e) => {
+                    setUserName(e.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -120,7 +139,9 @@ function SignUp() {
                   id="password"
                   label="Password"
                   type="password"
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -132,7 +153,9 @@ function SignUp() {
                   required
                   id="fullName"
                   label="Full Name"
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={(e) => {
+                    setFullName(e.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -143,8 +166,10 @@ function SignUp() {
                   fullWidth
                   id="contactNo"
                   label="Contact No"
-                  type="telephone"
-                  onChange={(e) => setContactNo(e.target.value)}
+                  type="tel"
+                  onChange={(e) => {
+                    setContactNo(e.target.value);
+                  }}
                 />
               </Grid>
             </Grid>

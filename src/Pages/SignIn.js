@@ -18,10 +18,10 @@ import "./SignIn.css";
 function SignIn() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [contactNo, setContactNo] = useState(0);
-  const [avatar, setAvatar] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [fullName, setFullName] = useState("");
+  // const [contactNo, setContactNo] = useState(0);
+  // const [avatar, setAvatar] = useState("");
 
   const history = useHistory();
 
@@ -41,11 +41,11 @@ function SignIn() {
         .collection("users")
         .where("userName", "==", userName);
 
-      console.log(userName);
+      console.log(userRef);
 
       userRef
         .get()
-        .then((querySnapshot) => {
+        .then(function (querySnapshot) {
           if (querySnapshot.size > 0) {
             console.log(querySnapshot.docs[0].id);
 
@@ -55,7 +55,7 @@ function SignIn() {
               .auth()
               .signInWithEmailAndPassword(emailDB, password)
               .then((userCred) => {
-                const user = userCred.user;
+                var user = userCred.user;
                 history.replace("/");
               })
               .catch((err) => {
@@ -66,18 +66,18 @@ function SignIn() {
               });
           } else {
             console.log("No Data");
-            alert("User Already Exists");
+            // alert("User Already Exists");
           }
         })
         .catch((err) => {
-          console.log("Error");
+          console.log(err);
         });
     } else {
       firebaseApp
         .auth()
         .signInWithEmailAndPassword(userName, password)
         .then((userCred) => {
-          const user = userCred.user;
+          var user = userCred.user;
           history.replace("/");
         })
         .catch((err) => {
@@ -106,9 +106,9 @@ function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email/userName"
+              // id="email/userName"
               label="Email/User Name"
-              autoFocus
+              // autoFocus
               onChange={(e) => {
                 setUserName(e.target.value);
               }}

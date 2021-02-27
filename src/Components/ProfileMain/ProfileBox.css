@@ -82,6 +82,19 @@ p {
   margin-right: 20px !important;
 }
 
+.modal-closeBtn {
+  background-color: var(--twitter-background) !important;
+  /* border: none !important; */
+  /* color: white !important; */
+  font-weight: 900 !important;
+  text-transform: inherit !important;
+  border-radius: 30px !important;
+  height: 50px !important;
+  margin-top: 10px !important;
+  padding: 20px !important;
+  margin-left: 200px !important;
+}
+
 /* .modalHeader > Button {
   padding: 20px;
 } */

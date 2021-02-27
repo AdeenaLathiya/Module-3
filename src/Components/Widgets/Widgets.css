@@ -3,7 +3,7 @@
 }
 
 .widgets-input {
-  display: flex;
+  display: flex; 
   align-items: center;
   background-color: var(--twitter-background);
   padding: 10px;

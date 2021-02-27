@@ -16,18 +16,30 @@ function TweetBox() {
   const [verified, setVerified] = useState("false");
   const [userID, setUserID] = useState("");
 
+  const [open, setOpen] = useState(false);
+
+  // const handleOpen = () => {
+  //   setOpen(true);
+  // };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   // console.log(firebaseApp.firebase_.firestore.Timestamp.fromDate);
 
-  firebaseApp.auth().onAuthStateChanged((user) => {
+  firebaseApp.auth().onAuthStateChanged(function (user) {
     if (user) {
-      console.log("Signed In", firebaseApp.auth().currentUser.uid);
+      // console.log("Signed In", firebaseApp.auth().currentUser.uid);
+
       var userID = firebaseApp.auth().currentUser.uid;
       const userRef = firebaseApp.firestore().collection("users").doc(userID);
+
       userRef
         .get()
         .then((doc) => {
           if (doc.exists) {
-            console.log("Doc data: ", doc.data());
+            // console.log("Doc data: ", doc.data());
 
             const data = doc.data();
             setFullName(data.fullName);
@@ -35,9 +47,13 @@ function TweetBox() {
             setVerified(data.verified);
             setAvatar(data.avatar);
             setUserID(userID);
-          } else console.log("No Data");
+          } else {
+            console.log("No Data");
+          }
         })
-        .catch((err) => console.log("Error"));
+        .catch((err) => {
+          console.log(err);
+        });
     }
   });
 
@@ -62,11 +78,14 @@ function TweetBox() {
       // .now() / 3600
       creatyBy: userID,
       avatar: avatar,
+      likes: 0,
     });
 
     setTweetMessage("");
     setTweetImage("");
-    setAvatar("");
+    // setAvatar("");
+
+    handleClose();
   };
 
   return (

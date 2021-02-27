@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import FlipMove from "react-flip-move";
+
 import { Avatar, Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import Modal from "@material-ui/core/Modal";
@@ -14,16 +16,18 @@ import CloseIcon from "@material-ui/icons/Close";
 
 import firebaseApp from "../../firebase";
 
-import "./ProfileBox.css";
+import Followers from "../Followers/Followers";
+import Post from "../Feed/Post";
+import "../ProfileMain/ProfileBox.css";
 
-function ProfileBox({ userName }) {
+function User({ uName }) {
   const [posts, setPosts] = useState([]);
   const [email, setEmail] = useState("");
   const [contactNo, setContactNo] = useState(0);
   const [avatar, setAvatar] = useState("");
   const [fullName, setFullName] = useState("");
   const [status, setStatus] = useState("");
-  const [username, setUserName] = useState("");
+  const [username, setUserName] = useState(uName);
   const [createdOn, setCreatedOn] = useState("");
   const [verified, setVerified] = useState("false");
   const [loggedInUser, setLoggedInUser] = useState("");
@@ -53,13 +57,13 @@ function ProfileBox({ userName }) {
         firebaseApp
           .firestore()
           .collection("users")
-          .where("userName", "==", userName)
+          .where("userName", "==", uName)
           .get()
           .then((onSnapshot) => {
             if (onSnapshot.size > 0) {
               let doc = onSnapshot.docs[0];
               setFullName(doc.data().fullName);
-              setUserName(doc.data().username);
+              setUserName(doc.data().userName);
               setContactNo(doc.data().contactNo);
               setAvatar(doc.data().avatar);
               setEmail(doc.data().email);
@@ -151,11 +155,33 @@ function ProfileBox({ userName }) {
   }, []);
 
   const onFollow = () => {
+    const followRef = firebaseApp.firestore().collection("follow");
 
+    const data = {
+      followedUser: userID,
+      followedBy: loggedInUser,
+    };
+    followRef.add(data);
+    setFollow(true);
   };
-  
+
+  const onUnFollow = () => {
+    const followRef = firebaseApp
+      .firestore()
+      .collection("follow")
+      .where("followedUser", "==", userID)
+      .where("followedBy", "==", loggedInUser);
+
+    followRef.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        doc.ref.delete();
+      });
+    });
+    setFollow(false);
+  };
+
   const onFileChange = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     const file = e.target.files[0];
     const storageRef = firebaseApp.storage().ref("avatar/");
@@ -170,15 +196,16 @@ function ProfileBox({ userName }) {
     var data = {
       avatar: avatar,
       contactNo: contactNo,
-      email: email,
+      // email: email,
       fullName: fullName,
       status: status,
-      userName: userName,
-      verified: verified,
+      // userName: userName,
+      // verified: verified,
     };
 
-    var db = firebaseApp.firestore().collection("users").doc(userID);
-    db.set(data);
+    var db = firebaseApp.firestore().collection("users").doc(loggedInUser);
+    db.update(data);
+    // db.set(data);
 
     console.log("Updated");
 
@@ -204,31 +231,31 @@ function ProfileBox({ userName }) {
   // })
   // .catch((err) => console.log("Error"));
 
-  firebaseApp.auth().onAuthStateChanged((user) => {
-    if (user) {
-      console.log("Signed In", firebaseApp.auth().currentUser.uid);
-      var userID = firebaseApp.auth().currentUser.uid;
-      const userRef = firebaseApp.firestore().collection("users").doc(userID);
-      userRef
-        .get()
-        .then((doc) => {
-          if (doc.exists) {
-            console.log("Doc data: ", doc.data());
+  // firebaseApp.auth().onAuthStateChanged((user) => {
+  //   if (user) {
+  //     console.log("Signed In", firebaseApp.auth().currentUser.uid);
+  //     var userID = firebaseApp.auth().currentUser.uid;
+  //     const userRef = firebaseApp.firestore().collection("users").doc(userID);
+  //     userRef
+  //       .get()
+  //       .then((doc) => {
+  //         if (doc.exists) {
+  //           console.log("Doc data: ", doc.data());
 
-            const data = doc.data();
-            setAvatar(data.avatar);
-            setContactNo(data.contactNo);
-            setEmail(data.email);
-            setFullName(data.fullName);
-            setStatus(data.status);
-            setUserName(data.userName);
-            setCreatedOn(data.createdOn);
-            setUserID(userID);
-          } else console.log("No Data");
-        })
-        .catch((err) => console.log("Error"));
-    }
-  });
+  //           const data = doc.data();
+  //           setAvatar(data.avatar);
+  //           setContactNo(data.contactNo);
+  //           setEmail(data.email);
+  //           setFullName(data.fullName);
+  //           setStatus(data.status);
+  //           setUserName(data.userName);
+  //           setCreatedOn(data.createdOn);
+  //           setUserID(userID);
+  //         } else console.log("No Data");
+  //       })
+  //       .catch((err) => console.log("Error"));
+  //   }
+  // });
 
   return (
     <div className="profileBox">
@@ -236,17 +263,63 @@ function ProfileBox({ userName }) {
         <Avatar className="profileBox-inputAvatar" src={avatar} />
       </div>
       <h3>{fullName}</h3>
-      <h5>{`@${userName}`}</h5>
+      <h5>{`@${username}`}</h5>
       <p>{`Status: ${status}`}</p>
-      <p>{`Created On: ${createdOn}`}</p>
-      <Button
-        startIcon={<EditIcon />}
-        variant="outlined"
-        className="profileBox-edit"
-        onClick={handleOpen}
-      >
-        Edit Profile
-      </Button>
+      {/* <p>{`Created On: ${createdOn}`}</p> */}
+      <Followers userID={userID} />
+      {isLoggedIn ? (
+        <Button
+          startIcon={<EditIcon />}
+          variant="outlined"
+          className="profileBox-edit"
+          onClick={handleOpen}
+        >
+          Edit Profile
+        </Button>
+      ) : follow ? (
+        <Button
+          // startIcon={<EditIcon />}
+          variant="outlined"
+          className="profileBox-edit"
+          onClick={onUnFollow}
+        >
+          UnFollow
+        </Button>
+      ) : (
+        <Button
+          // startIcon={<EditIcon />}
+          variant="outlined"
+          className="profileBox-edit"
+          onClick={onFollow}
+        >
+          Follow
+        </Button>
+      )}
+
+      {posts.length > 0 ? (
+        <FlipMove>
+          {posts.map((post, i) => (
+            <Post
+              key={i} //documentid aaegi yahan pr firebase.doc.id
+              displayName={post.displayName}
+              userName={post.userName}
+              verified={post.verified}
+              text={post.text}
+              avatar={post.avatar}
+              image={post.image}
+              createdOn={post.createdOn}
+              totalLikes={post.likes}
+              postID={postID[i]}
+              liked={liked[i]}
+            />
+          ))}
+        </FlipMove>
+      ) : (
+        <div>
+          <h1>No Tweets Yet</h1>
+        </div>
+      )}
+
       <Modal
         // aria-labelledby="transition-modal-title"
         // aria-describedby="transition-modal-description"
@@ -263,6 +336,12 @@ function ProfileBox({ userName }) {
           <div className="profileBox-modalFade">
             <div className="modalHeader">
               <h2>Edit Profile</h2>
+              <Avatar
+                startIcon={<EditIcon />}
+                className="modal-inputAvatar"
+                src={avatar}
+              />
+              <Input type="file" onChange={onFileChange} name="avatar" />
               {/* <Button
                 endIcon={<DoneIcon />}
                 variant="outlined"
@@ -279,12 +358,12 @@ function ProfileBox({ userName }) {
                   // className="profileBox-header"
                   >
                     {/* <EditIcon> */}
-                    <Avatar
+                    {/* <Avatar
                       startIcon={<EditIcon />}
                       className="modal-inputAvatar"
                       src={avatar}
                     />
-                    <Input type="file" onChange={onFileChange} name="avatar" />
+                    <Input type="file" onChange={onFileChange} name="avatar" /> */}
                     {/* </EditIcon> */}
                   </div>
                 </Grid>
@@ -306,13 +385,13 @@ function ProfileBox({ userName }) {
                     variant="outlined"
                     fullWidth
                     label="User Name"
-                    value={userName}
+                    value={username}
                     disabled
                   />
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <TextField
-                    autoComplete="fullName"
+                    // autoComplete="fullName"
                     name="fullName"
                     type="text"
                     variant="outlined"
@@ -379,4 +458,4 @@ function ProfileBox({ userName }) {
   );
 }
 
-export default ProfileBox;
+export default User;

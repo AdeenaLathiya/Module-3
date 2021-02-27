@@ -1,11 +1,15 @@
 import React from "react";
 
+import { useParams } from "react-router-dom";
+
 import ProfileBox from "../ProfileMain/ProfileBox";
 import ProfileNav from "../ProfileMain/ProfileNav";
 
 import "./ProfileMain.css";
 
-function Profile() {
+function ProfileMain() {
+  const { userName } = useParams();
+
   return (
     <div className="feed">
       {/* Header */}
@@ -14,7 +18,7 @@ function Profile() {
       </div>
 
       {/* ProfileBox */}
-      <ProfileBox />
+      <ProfileBox userName={userName} />
 
       {/* ProfileNav */}
       <ProfileNav />
@@ -22,4 +26,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default ProfileMain;

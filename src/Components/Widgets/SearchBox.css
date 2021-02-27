@@ -1,0 +1,26 @@
+.search {
+  flex: 0.3;
+}
+
+.search-input {
+  display: flex;
+  align-items: center;
+  background-color: var(--twitter-background);
+  padding: 10px;
+  border-radius: 20px;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+.search-input > input {
+  border: none;
+  background-color: var(--twitter-background);
+}
+
+.search-searchIcon {
+  color: gray;
+}
+
+/* input::-webkit-calendar-picker-indicator {
+  display: none;
+} */

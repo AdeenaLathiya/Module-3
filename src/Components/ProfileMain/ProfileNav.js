@@ -9,10 +9,11 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 // import LocationOnIcon from "@material-ui/icons/LocationOn";
 
-import followers from "../followers/followers";
+import Followers from "../Followers/Followers";
 import following from "../following/following";
 import myTweets from "../myTweets/myTweets";
 import likedTweets from "../likedTweets/likedTweets";
+import Widgets from "../Widgets/Widgets";
 
 import "./ProfileNav.css";
 
@@ -35,7 +36,9 @@ function ProfileNav() {
           onChange={<myTweets />}
         />
 
-        <BottomNavigationAction label="Liked Tweets" icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="Liked Tweets" icon={<FavoriteIcon />}>
+          <Widgets />
+        </BottomNavigationAction>
 
         <BottomNavigationAction
           label="Followers"

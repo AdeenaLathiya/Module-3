@@ -5,6 +5,7 @@ import Home from "./Pages/Home";
 import SignUp from "./Pages/SignUp";
 import SignIn from "./Pages/SignIn";
 import Profile from "./Pages/Profile";
+import User from "./Components/User/User";
 
 import "./App.css";
 
@@ -22,7 +23,7 @@ function App() {
           <Route exact path="/signup">
             <SignUp />
           </Route>
-          <Route exact path="/profile">
+          <Route exact path="/profile/:username">
             <Profile />
           </Route>
         </Switch>
