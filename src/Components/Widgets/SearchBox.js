@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-// import SearchBox from "./SearchBox";
-
 import SearchIcon from "@material-ui/icons/Search";
 
 import firebaseApp from "../../firebase";
@@ -31,7 +29,6 @@ function SearchBox() {
   };
 
   return (
-    // <div>
     <div className="search">
       <div className="search-input">
         <SearchIcon className="search-searchIcon" />
@@ -49,7 +46,6 @@ function SearchBox() {
         ))}
       </datalist>
     </div>
-    // </div>
   );
 }
 
